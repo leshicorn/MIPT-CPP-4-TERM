@@ -98,9 +98,47 @@ int GetDistinctRealRootCount(double a, double b, double c) {
   // чтобы проверить, что ваши тесты пропускают корректный код
   // и ловят некорректный
 }
+void TestNoRoots() {
+  AssertEqual(GetDistinctRealRootCount(1, 0, 1), 0, "No real roots, discriminant < 0");
+  AssertEqual(GetDistinctRealRootCount(0, 0, 1), 0, "No real roots, a = b = 0");
+}
+
+void TestOneRoot() {
+  AssertEqual(GetDistinctRealRootCount(1, -2, 1), 1, "One real root, discriminant = 0");
+  AssertEqual(GetDistinctRealRootCount(1, 4, 4), 1, "One real root, a = 1, b = 4, c = 4");
+}
+
+void TestTwoRoots() {
+  AssertEqual(GetDistinctRealRootCount(1, 0, -4), 2, "Two distinct real roots");
+  AssertEqual(GetDistinctRealRootCount(1, -5, 6), 2, "Two distinct real roots, a = 1, b = -5, c = 6");
+}
+
+void TestAllCoefficientsZero() {
+  AssertEqual(GetDistinctRealRootCount(0, 0, 0), 0, "All coefficients are zero");
+}
+
+void TestLinearEquation() {
+  AssertEqual(GetDistinctRealRootCount(0, 2, 3), 1, "Linear equation, one real root");
+  AssertEqual(GetDistinctRealRootCount(0, 0, 5), 0, "Linear equation, no real roots");
+}
+
+void TestQuadraticEquation() {
+  AssertEqual(GetDistinctRealRootCount(2, 4, 2), 1, "Quadratic equation, one real root");
+  AssertEqual(GetDistinctRealRootCount(3, -6, 3), 1, "Quadratic equation, one real root");
+}
+
+void TestComplexRoots() {
+  AssertEqual(GetDistinctRealRootCount(1, 2, 2), 0, "Complex roots, discriminant < 0");
+}
 
 int main() {
   TestRunner runner;
-  // добавьте сюда свои тесты
+  runner.RunTest(TestNoRoots, "TestNoRoots");
+  runner.RunTest(TestOneRoot, "TestOneRoot");
+  runner.RunTest(TestTwoRoots, "TestTwoRoots");
+  runner.RunTest(TestAllCoefficientsZero, "TestAllCoefficientsZero");
+  runner.RunTest(TestLinearEquation, "TestLinearEquation");
+  runner.RunTest(TestQuadraticEquation, "TestQuadraticEquation");
+  runner.RunTest(TestComplexRoots, "TestComplexRoots");
   return 0;
 }
