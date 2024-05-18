@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS= -Wall -Wextra -Wpedantic -g
-NAME =  main
-CNAME = main.cpp
-ONAME = main.o
+NAME =  comment_server
+CNAME = comment_server.cpp
+ONAME = comment_server.o
 
 objs:
 		$(CC) $(CFLAGS) -c $(CNAME)
