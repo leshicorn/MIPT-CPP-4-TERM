@@ -310,3 +310,71 @@ private:
   HotelProvider hotel_provider;
   FlightProvider flight_provider;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma once
+
+namespace RAII {
+
+template <typename Provider>
+class Booking {
+public:
+    // Конструктор
+    Booking(Provider* provider, int id)
+        : provider_(provider), id_(id), active_(true) {}
+
+    // Конструктор перемещения
+    Booking(Booking&& other) noexcept
+        : provider_(other.provider_), id_(other.id_), active_(other.active_) {
+        other.active_ = false; // Перемещенный объект неактивен
+    }
+
+    // Оператор перемещения
+    Booking& operator=(Booking&& other) noexcept {
+        if (this != &other) {
+            if (active_) {
+                provider_->CancelOrComplete(*this);
+            }
+            provider_ = other.provider_;
+            id_ = other.id_;
+            active_ = other.active_;
+            other.active_ = false; // Перемещенный объект неактивен
+        }
+        return *this;
+    }
+
+    // Деструктор
+    ~Booking() {
+        if (active_) {
+            provider_->CancelOrComplete(*this);
+        }
+    }
+
+    // Получение ID бронирования
+    int GetId() const {
+        return id_;
+    }
+
+private:
+    Provider* provider_; // Указатель на провайдера, для которого было сделано бронирование
+    int id_;             // ID бронирования
+    bool active_;        // Активен ли объект бронирования
+
+    // Запрещаем копирование
+    Booking(const Booking&) = delete;
+    Booking& operator=(const Booking&) = delete;
+};
+
+} // namespace RAII
+
