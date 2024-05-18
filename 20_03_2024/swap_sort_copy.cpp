@@ -1,17 +1,35 @@
 #include "test_runner.h"
 
+#include <vector>
 #include <algorithm>
 #include <numeric>
+
 using namespace std;
 
-template <typename T>
-void Swap(T* first, T* second);
 
 template <typename T>
-void SortPointers(vector<T*>& pointers);
+void Swap(T* first, T* second) {
+    T temp = std::move(*first);
+    *first = std::move(*second);
+    *second = std::move(temp);
+}
 
 template <typename T>
-void ReversedCopy(T* source, size_t count, T* destination);
+void SortPointers(std::vector<T*>& pointers) {
+    std::sort(pointers.begin(), pointers.end(), [](T* a, T* b) { return *a < *b; });
+}
+
+template <typename T>
+void ReversedCopy(T* source, size_t count, T* destination) {
+    if (source == destination) {
+        std::reverse(destination, destination + count);
+    } else if (source < destination) {
+        std::reverse_copy(source, source + count, destination);
+    } else {
+        std::reverse_copy(source, source + count, destination + count);
+    }
+}
+
 
 void TestSwap() {
   int a = 1;

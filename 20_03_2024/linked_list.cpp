@@ -3,27 +3,65 @@
 #include <vector>
 using namespace std;
 
+#include <cassert>
+
 template <typename T>
 class LinkedList {
 public:
-  struct Node {
-    T value;
-    Node* next = nullptr;
-  };
+    struct Node {
+        T value;
+        Node* next = nullptr;
+    };
 
-  ~LinkedList();
+    ~LinkedList() {
+        while (head) {
+            PopFront();
+        }
+    }
 
-  void PushFront(const T& value);
-  void InsertAfter(Node* node, const T& value);
-  void RemoveAfter(Node* node);
-  void PopFront();
+    void PushFront(const T& value) {
+        Node* new_node = new Node{value, head};
+        head = new_node;
+    }
 
-  Node* GetHead() { return head; }
-  const Node* GetHead() const { return head; }
+    void InsertAfter(Node* node, const T& value) {
+        if (!node) {
+            PushFront(value);
+            return;
+        }
+        Node* new_node = new Node{value, node->next};
+        node->next = new_node;
+    }
+
+    void RemoveAfter(Node* node) {
+        if (!node) {
+            PopFront();
+            return;
+        }
+        if (!node->next) {
+            return; // No node to remove after
+        }
+        Node* to_delete = node->next;
+        node->next = to_delete->next;
+        delete to_delete;
+    }
+
+    void PopFront() {
+        if (!head) {
+            return; // Empty list
+        }
+        Node* to_delete = head;
+        head = head->next;
+        delete to_delete;
+    }
+
+    Node* GetHead() { return head; }
+    const Node* GetHead() const { return head; }
 
 private:
-  Node* head = nullptr;
+    Node* head = nullptr;
 };
+
 
 template <typename T>
 vector<T> ToVector(const LinkedList<T>& list) {

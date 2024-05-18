@@ -2,13 +2,16 @@
 #include "test_runner.h"
 
 #include <algorithm>
+#include <map>
+#include <string>
 
 using namespace std;
 
 //Оптимизируйте эту функцию
-bool Compare(Student first, Student second) {
-  return first.Less(second);
+bool Compare(const Student& first, const Student& second) {
+    return first.rating > second.rating;
 }
+
 
 void TestComparison() {
   Student newbie {
